@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace BooksManagementSystem.Application.Features.Authentication.Validators
 {
-    internal class RegisterUserValidator : AbstractValidator<RegisterUserCommand>
+    public class RegisterUserValidator : AbstractValidator<RegisterUserCommand>
     {
         public RegisterUserValidator()
         {
