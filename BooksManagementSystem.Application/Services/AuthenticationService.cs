@@ -47,7 +47,7 @@ namespace BooksManagementSystem.Application.Services
                 new Claim(JwtRegisteredClaimNames.Jti , Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier , user.Id.ToString()),
                 new Claim(ClaimTypes.Name , user.FullName),
-                new Claim("Username" ,  user.UserName),
+                new Claim("username" ,  user.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email)
             }
             .Union(userClaims)
@@ -131,12 +131,14 @@ namespace BooksManagementSystem.Application.Services
 
             string jwtToken = await CreateJWTTokenAsync(user);
 
+            var roles = await userManager.GetRolesAsync(user);
+
             return new JwtAuthResponse()
             {
                 Token = jwtToken,
                 Email = user.Email,
                 UserName = user.UserName,
-                Roles = null,
+                Roles = roles.ToList(),
                 RefreshToken = newRefreshToken.Token,
                 RefreshTokenExpiration = newRefreshToken.ExpiresOn
             };

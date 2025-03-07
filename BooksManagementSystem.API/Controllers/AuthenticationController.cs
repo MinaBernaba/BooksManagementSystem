@@ -8,43 +8,17 @@ namespace BooksManagementSystem.API.Controllers
     [ApiController]
     public class AuthenticationController : AppControllerBase
     {
-
-        #region Set Refresh Token In Cookie
-        private void SetRefreshTokenInCookie(string refreshToken, DateTime expiresOn)
-        {
-            var cookieOptions = new CookieOptions()
-            {
-                HttpOnly = true,
-                Expires = expiresOn.ToLocalTime()
-            };
-            Response.Cookies.Append("RefreshToken", refreshToken, cookieOptions);
-        }
-        #endregion
-
-        #region  Delete Refresh Token In Cookie
-        private void DeleteRefreshTokenFromCookie()
-        {
-            var cookieOptions = new CookieOptions()
-            {
-                HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(-1)
-            };
-            Response.Cookies.Append("RefreshToken", "", cookieOptions);
-        }
-        #endregion
-
         #region Login
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginUserCommand loginUser)
         {
             var response = await Mediator.Send(loginUser);
-            if (response.Data == null)
-            {
-                DeleteRefreshTokenFromCookie();
-                return NewResult(response);
-            }
 
-            SetRefreshTokenInCookie(response.Data.RefreshToken, response.Data.RefreshTokenExpiration);
+            if (response.Data != null)
+                SetRefreshTokenInCookie(response.Data.RefreshToken, response.Data.RefreshTokenExpiration);
+            else
+                DeleteRefreshTokenFromCookie();
+
             return NewResult(response);
         }
         #endregion
@@ -55,15 +29,8 @@ namespace BooksManagementSystem.API.Controllers
         {
             var response = await Mediator.Send(registerUser);
             if (response.Data != null)
-            {
-                var cookieOptions = new CookieOptions()
-                {
-                    HttpOnly = true,
-                    Expires = response.Data.RefreshTokenExpiration.ToLocalTime()
-                };
+                SetRefreshTokenInCookie(response.Data.RefreshToken, response.Data.RefreshTokenExpiration);
 
-                Response.Cookies.Append("RefreshToken", response.Data.RefreshToken, cookieOptions);
-            }
             return Ok(response);
         }
         #endregion
@@ -97,6 +64,30 @@ namespace BooksManagementSystem.API.Controllers
                 return BadRequest("Refresh Token is required!");
 
             return NewResult(await Mediator.Send(new RevokeRefreshTokenCommand() { RefreshToken = refreshToken }));
+        }
+        #endregion
+
+        #region Set Refresh Token In Cookie
+        private void SetRefreshTokenInCookie(string refreshToken, DateTime expiresOn)
+        {
+            var cookieOptions = new CookieOptions()
+            {
+                HttpOnly = true,
+                Expires = expiresOn.ToLocalTime()
+            };
+            Response.Cookies.Append("RefreshToken", refreshToken, cookieOptions);
+        }
+        #endregion
+
+        #region  Delete Refresh Token In Cookie
+        private void DeleteRefreshTokenFromCookie()
+        {
+            var cookieOptions = new CookieOptions()
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(-1)
+            };
+            Response.Cookies.Append("RefreshToken", "", cookieOptions);
         }
         #endregion
     }

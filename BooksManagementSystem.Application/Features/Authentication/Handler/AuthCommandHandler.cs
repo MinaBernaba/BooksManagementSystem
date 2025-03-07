@@ -43,8 +43,6 @@ namespace BooksManagementSystem.Application.Features.Authentication.Handler
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == request.UserName);
 
-            var activeRefreshTokens = user?.RefreshTokens.Where(x => x.ExpiresOn > DateTime.UtcNow && x.RevokedOn == null).ToList();
-
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
                 return BadRequest<JwtAuthResponse>("Invalid username or password.");
 
