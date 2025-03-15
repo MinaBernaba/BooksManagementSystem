@@ -5,12 +5,12 @@ namespace BooksManagementSystem.Application.ResponseBase
     public class Response<T>
     {
         #region Props
-        public T Data { get; set; }
+        public T? Data { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public bool Succeeded { get; set; }
         public string? Message { get; set; }
         public List<string> Errors { get; set; } = new List<string>();
-        public object Meta { get; set; }
+        public object? Meta { get; set; }
         #endregion
 
         #region ctors 
@@ -18,7 +18,7 @@ namespace BooksManagementSystem.Application.ResponseBase
         {
 
         }
-        public Response(T data, string message = null)
+        public Response(T data, string message)
         {
             Succeeded = true;
             Message = message;

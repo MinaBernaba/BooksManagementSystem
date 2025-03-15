@@ -13,7 +13,7 @@ namespace BooksManagementSystem.Application.Services
         {
             const string cacheKey = "GetAllBooks";
 
-            if (!_cache.TryGetValue(cacheKey, out List<BookMainInfoResponse> books))
+            if (!_cache.TryGetValue(cacheKey, out List<BookMainInfoResponse>? books))
             {
                 books = await _unitOfWork.Books.GetAllNoTracking().Select(x => new BookMainInfoResponse()
                 {
@@ -26,7 +26,7 @@ namespace BooksManagementSystem.Application.Services
                 .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
                 _cache.Set(cacheKey, books, cacheEntryOptions);
             }
-            return books;
+            return books ?? new List<BookMainInfoResponse>();
         }
         public async Task<BookMainInfoResponse> GetBookByIdAsync(int bookId)
             => await _unitOfWork.Books.GetAllNoTracking()

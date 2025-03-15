@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BooksManagementSystem.Application.Features.Books.Queries.Models;
+﻿using BooksManagementSystem.Application.Features.Books.Queries.Models;
 using BooksManagementSystem.Application.Features.Books.Queries.Responses;
 using BooksManagementSystem.Application.ResponseBase;
 using BooksManagementSystem.Application.ServiceInterfaces;
@@ -7,7 +6,7 @@ using MediatR;
 
 namespace BooksManagementSystem.Application.Features.Books.Queries.Handler
 {
-    public class BookQueryHandler(IBookService _bookService, IMapper _mapper) : ResponseHandler,
+    public class BookQueryHandler(IBookService _bookService) : ResponseHandler,
         IRequestHandler<GetAllBooksQuery, Response<List<BookMainInfoResponse>>>,
         IRequestHandler<GetBookByIdQuery, Response<BookMainInfoResponse>>
     {

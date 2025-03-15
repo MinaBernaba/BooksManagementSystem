@@ -1,4 +1,5 @@
 ﻿using BooksManagementSystem.Application.Features.Authentication.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.api.Base;
 
@@ -6,13 +7,13 @@ namespace BooksManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : AppControllerBase
+    public class AuthenticationController(IMediator _mediator) : AppControllerBase
     {
         #region Login
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginUserCommand loginUser)
         {
-            var response = await Mediator.Send(loginUser);
+            var response = await _mediator.Send(loginUser);
 
             if (response.Data != null)
                 SetRefreshTokenInCookie(response.Data.RefreshToken, response.Data.RefreshTokenExpiration);
@@ -27,7 +28,7 @@ namespace BooksManagementSystem.API.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterUser(RegisterUserCommand registerUser)
         {
-            var response = await Mediator.Send(registerUser);
+            var response = await _mediator.Send(registerUser);
             if (response.Data != null)
                 SetRefreshTokenInCookie(response.Data.RefreshToken, response.Data.RefreshTokenExpiration);
 
@@ -44,7 +45,7 @@ namespace BooksManagementSystem.API.Controllers
             if (string.IsNullOrWhiteSpace(refreshToken))
                 return BadRequest("No refresh token provided!");
 
-            var response = await Mediator.Send(new RenewTokensCommand() { RefreshToken = refreshToken });
+            var response = await _mediator.Send(new RenewTokensCommand() { RefreshToken = refreshToken });
 
             if (response.Data != null)
                 SetRefreshTokenInCookie(response.Data.RefreshToken, response.Data.RefreshTokenExpiration);
@@ -63,7 +64,7 @@ namespace BooksManagementSystem.API.Controllers
             if (string.IsNullOrWhiteSpace(refreshToken))
                 return BadRequest("Refresh Token is required!");
 
-            return NewResult(await Mediator.Send(new RevokeRefreshTokenCommand() { RefreshToken = refreshToken }));
+            return NewResult(await _mediator.Send(new RevokeRefreshTokenCommand() { RefreshToken = refreshToken }));
         }
         #endregion
 

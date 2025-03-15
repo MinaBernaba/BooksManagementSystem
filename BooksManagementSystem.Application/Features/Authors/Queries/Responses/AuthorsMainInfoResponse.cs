@@ -2,7 +2,7 @@
 {
     public class AuthorsMainInfoResponse
     {
-        public string AuthorName { get; set; }
+        public string AuthorName { get; set; } = null!;
         public DateOnly DateOfBirth { get; set; }
     }
 }

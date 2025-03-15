@@ -1,5 +1,4 @@
 ﻿using BooksManagementSystem.Application.ResponseBase;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -8,9 +7,6 @@ namespace SchoolManagementSystem.api.Base
     [ApiController]
     public class AppControllerBase : ControllerBase
     {
-        private IMediator _mediator;
-        public IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
-
         public ObjectResult NewResult<T>(Response<T> response)
         {
             switch (response.StatusCode)

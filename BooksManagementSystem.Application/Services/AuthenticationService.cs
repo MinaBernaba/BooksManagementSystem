@@ -47,8 +47,8 @@ namespace BooksManagementSystem.Application.Services
                 new Claim(JwtRegisteredClaimNames.Jti , Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier , user.Id.ToString()),
                 new Claim(ClaimTypes.Name , user.FullName),
-                new Claim("username" ,  user.UserName),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim("username" ,  user.UserName!),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email!)
             }
             .Union(userClaims)
             .Union(rolesClaims);
@@ -77,8 +77,8 @@ namespace BooksManagementSystem.Application.Services
 
             var authResponse = new JwtAuthResponse()
             {
-                UserName = user.UserName,
-                Email = user.Email,
+                UserName = user.UserName!,
+                Email = user.Email!,
                 Token = jwtToken,
                 Roles = rolesList.ToList()
             };
@@ -136,8 +136,8 @@ namespace BooksManagementSystem.Application.Services
             return new JwtAuthResponse()
             {
                 Token = jwtToken,
-                Email = user.Email,
-                UserName = user.UserName,
+                Email = user.Email!,
+                UserName = user.UserName!,
                 Roles = roles.ToList(),
                 RefreshToken = newRefreshToken.Token,
                 RefreshTokenExpiration = newRefreshToken.ExpiresOn

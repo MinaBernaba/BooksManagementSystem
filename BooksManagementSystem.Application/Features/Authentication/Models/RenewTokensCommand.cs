@@ -6,6 +6,6 @@ namespace BooksManagementSystem.Application.Features.Authentication.Models
 {
     public class RenewTokensCommand : IRequest<Response<JwtAuthResponse>>
     {
-        public string RefreshToken { get; set; }
+        public string RefreshToken { get; set; } = null!;
     }
 }

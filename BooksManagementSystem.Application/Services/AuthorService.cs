@@ -16,7 +16,8 @@ namespace BooksManagementSystem.Application.Services
         {
             const string cacheKey = "GetAllAuthors";
 
-            if (!_cache.TryGetValue(cacheKey, out List<AuthorsMainInfoResponse> authors))
+
+            if (!_cache.TryGetValue(cacheKey, out List<AuthorsMainInfoResponse>? authors))
             {
                 authors = await unitOfWork.Authors.GetAllNoTracking().Select(x => new AuthorsMainInfoResponse()
                 {
@@ -28,8 +29,9 @@ namespace BooksManagementSystem.Application.Services
                 .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
                 _cache.Set(cacheKey, authors, cacheEntryOptions);
             }
-            return authors;
+            return authors ?? new List<AuthorsMainInfoResponse>();
         }
+
         public async Task<bool> AddAuthorAsync(Author author)
         {
             await unitOfWork.Authors.AddAsync(author);
