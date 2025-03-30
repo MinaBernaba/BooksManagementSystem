@@ -1,11 +1,11 @@
 ﻿using BooksManagementSystem.Application.ServiceInterfaces;
 using BooksManagementSystem.Application.Services;
+using BooksManagementSystem.Application.Validation;
 using BooksManagementSystem.Data.Helper;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProductsProject.Core.Bahaviors;
 using System.Reflection;
 
 namespace BooksManagementSystem.Application

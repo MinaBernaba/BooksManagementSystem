@@ -1,9 +1,9 @@
 #region usings
+using BooksManagementSystem.API.MiddleWare;
 using BooksManagementSystem.Application;
 using BooksManagementSystem.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using ProductsProject.Core.MiddleWare;
 using System.Text;
 #endregion
 
